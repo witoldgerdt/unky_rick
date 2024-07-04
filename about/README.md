@@ -10,10 +10,12 @@ This project demonstrates an example of using Python, Django, and ChatGPT as an 
 
 ## Getting Started
 
-[Heroku] (http://analytics-from-uncle.mypressonline.com/)
-Free web hosting
+Open the page.
 
 ## Contact
+
+[Heroku] (http://analytics-from-uncle.mypressonline.com/)
+Free web hosting
 
 If you like this project, I would appreciate your support by getting started or leaving a comment. Contributions are welcome, and I am open to discussions regarding collaboration.
 Feel free to connect with me for further discussions or potential job opportunities via [LinkedIn](https://www.linkedin.com/in/witold-gerdt/).
