@@ -10,7 +10,7 @@ This project demonstrates an example of using Python, Django, and ChatGPT as an 
 
 ## Getting Started
 
-[Heroku] (https://shorturl.at/bvQP8)
+[Heroku] (http://analytics-from-uncle.mypressonline.com/)
 Free web hosting
 
 ## Contact
