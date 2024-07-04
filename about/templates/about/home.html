@@ -18,6 +18,7 @@
             justify-content: center;
             min-height: 100vh;
             line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
         .container {
             text-align: center;
@@ -28,6 +29,7 @@
             max-width: 800px;
             width: 100%;
             margin: 20px;
+            box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
         }
         .photo {
             width: 100%;
@@ -38,6 +40,7 @@
             margin: 20px 0;
             text-align: justify;
             hyphens: none;
+            word-wrap: break-word; /* Ensure long words break to the next line */
         }
         .footer {
             margin-top: 20px;
