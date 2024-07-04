@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Django Project</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+        .photo {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .description {
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{% static 'about/images/unky_Rick.jpg' %}" alt="Project Photo" class="photo">
+        <div class="description">
+            <h1>Who is Unky Rick?</h1>
+            <p>During the summer holidays after the school year, your parents send you to stay with a distant relative you met a long time ago when you were a kid. All you know about him is his nickname, "Unky Rick." He's an elderly man who lives alone. Despite being somewhat reclusive, you remember having fun together during previous encounters. </p>
+            <p>Unky Rick has travelled extensively, but his health has recently declined. This led him to move closer to your family, and he now needs some assistance. </p>
+            <p>Upon arriving at his address, you are shocked to find a large house and a still robust and humorous old man greeting you at the door. After a brief conversation, you realise just how clever and intriguing your Unky Rick truly is. </p>
+            <p>You feel a strong desire to ask Unky Rick many questions. To do so, you'll need to be prepared to learn new things, as your passion for discovering will surely be sparked. </p>
+        </div>
+        <div class="footer">
+            &copy; Witold Gerdt, 2024
+        </div>
+    </div>
+</body>
+</html>
