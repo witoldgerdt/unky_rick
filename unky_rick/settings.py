@@ -95,9 +95,21 @@ WSGI_APPLICATION = 'unky_rick.wsgi.application'
 } """
 
 #Heroku postgres
-DATABASES = {
+""" DATABASES = {
     'default': dj_database_url.config(default=os.getenv('SCHEMATOGO_URL'))
+} """
+
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
+
+# Adjust settings to disable SSL for local testing
+if 'DATABASE_URL' in os.environ and 'localhost' in os.getenv('DATABASE_URL'):
+    DATABASES['default']['OPTIONS'] = {
+        'sslmode': 'disable',
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
