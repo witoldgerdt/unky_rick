@@ -57,6 +57,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+
 ROOT_URLCONF = 'unky_rick.urls'
 
 TEMPLATES = [
@@ -95,20 +97,21 @@ WSGI_APPLICATION = 'unky_rick.wsgi.application'
 } """
 
 #Heroku postgres
-""" DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('SCHEMATOGO_URL'))
-} """
-
-
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-}
+    'default': dj_database_url.config(default=os.getenv('SCHEMATOGO_URL'))
+} 
 
-# Disable SSL requirement for local testing
-if 'localhost' in DATABASES['default']['HOST']:
+
+'''DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+}'''
+
+# Disable SSL for local testing if DATABASE_URL points to localhost
+if DATABASES['default'].get('HOST') in ['localhost', '127.0.0.1']:
     DATABASES['default']['OPTIONS'] = {
         'sslmode': 'disable',
     }
+
 
 
 
