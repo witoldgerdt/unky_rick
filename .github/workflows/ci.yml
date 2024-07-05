@@ -27,6 +27,7 @@ jobs:
 
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+      GITHUB_ACTIONS: true
 
     steps:
     - name: Checkout code
@@ -48,4 +49,4 @@ jobs:
     - name: Run tests
       run: |
         python manage.py migrate
-        python manage.py test
+        pytest
