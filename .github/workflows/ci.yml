@@ -1,24 +1,31 @@
-name: Deploy to Heroku
+name: Django CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
+
+    env:
+      GITHUB_ACTIONS: true
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Heroku CLI
-      run: curl https://cli-assets.heroku.com/install.sh | sh
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
 
-    - name: Deploy to Heroku
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    - name: Install dependencies
       run: |
-        heroku git:remote -a your-heroku-app-name
-        git push heroku main
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: pytest test/test_about.py
