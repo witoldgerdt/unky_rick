@@ -111,6 +111,9 @@ if DATABASES['default'].get('HOST') in ['localhost', '127.0.0.1']:
     DATABASES['default']['OPTIONS'] = {
         'sslmode': 'disable',
     }
+    DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    }
 
 
 
