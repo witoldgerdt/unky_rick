@@ -83,39 +83,12 @@ WSGI_APPLICATION = 'unky_rick.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# The local sqlite
-""" DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-} """
-
-# Heroku sqlite
-""" DATABASES = {
-    'default': dj_database_url.config(default='sqlite:///db.sqlite3')
-} """
-
-#Heroku postgres
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('SCHEMATOGO_URL'))
-} 
+    'default': {}
+}
 
-
-'''DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-}'''
-
-# Disable SSL for local testing if DATABASE_URL points to localhost
-if DATABASES['default'].get('HOST') in ['localhost', '127.0.0.1']:
-    DATABASES['default']['OPTIONS'] = {
-        'sslmode': 'disable',
-    }
-    DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-    }
-
-
+if os.getenv('GITHUB_ACTIONS') != 'true':
+    DATABASES['default'] = dj_database_url.config(default=os.getenv('SCHEMATOGO_URL'))
 
 
 # Password validation
