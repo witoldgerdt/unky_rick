@@ -81,6 +81,7 @@ WSGI_APPLICATION = 'unky_rick.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# The local sqlite
 """ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -88,11 +89,15 @@ WSGI_APPLICATION = 'unky_rick.wsgi.application'
     }
 } """
 
-DATABASES = {
+# Heroku sqlite
+""" DATABASES = {
     'default': dj_database_url.config(default='sqlite:///db.sqlite3')
+} """
+
+#Heroku postgres
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('SCHEMATOGO_URL'))
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -128,13 +133,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+# Static files settings
 STATIC_URL = '/static/'
-""" STATICFILES_DIRS = [
-    BASE_DIR / "static",
-] """
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+
+# Whitenoise for static file serving
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # other middleware
+]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
