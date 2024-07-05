@@ -104,11 +104,12 @@ DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
-# Adjust settings to disable SSL for local testing
-if 'DATABASE_URL' in os.environ and 'localhost' in os.getenv('DATABASE_URL'):
+# Disable SSL requirement for local testing
+if 'localhost' in DATABASES['default']['HOST']:
     DATABASES['default']['OPTIONS'] = {
         'sslmode': 'disable',
     }
+
 
 
 # Password validation
