@@ -47,6 +47,10 @@ jobs:
         run: |
           python manage.py migrate
 
+      - name: Collect static files
+        run: |
+          python manage.py collectstatic --noinput
+
       - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
