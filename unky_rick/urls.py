@@ -20,5 +20,4 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('analyze_platform.urls')),
-    # path('general-page/', views.general_page, name='general_page'),
 ]
