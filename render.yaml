@@ -4,8 +4,10 @@ services:
     name: unky-rick
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: gunicorn unky_rick.wsgi:application
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "gunicorn unky_rick.wsgi --log-file -"
+    healthCheckPath: "/about/"
+
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: unky_rick.settings
