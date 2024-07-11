@@ -51,8 +51,12 @@ jobs:
         run: |
           python manage.py collectstatic --noinput
 
+      - name: List static files for debugging
+        run: |
+          ls -R staticfiles
+
       - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
-          pytest analyze_platform/test/
+         
