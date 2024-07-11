@@ -28,7 +28,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10.11'
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
@@ -51,6 +51,12 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
           python manage.py migrate
+
+      - name: Collect static files
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+        run: |
+          python manage.py collectstatic --noinput
 
       - name: Check for test file existence
         run: |
