@@ -7,3 +7,6 @@ def about(request):
 
 def money(request):
     return render(request, 'analyze_platform/money.html')
+
+def splash(request):
+    return render(request, 'analyze_platform/splash.html')
