@@ -2,7 +2,8 @@ import os
 import pytest
 from django.urls import reverse
 
-@pytest.mark.skipif(os.getenv('GITHUB_ACTIONS') is None, reason="Skipping this test locally")
+
+# @pytest.mark.skipif(not os.getenv('DATABASE_URL'), reason="No DATABASE_URL set")
 @pytest.mark.django_db
 def test_about_page_contains_expected_text(client):
     response = client.get(reverse('home'))
