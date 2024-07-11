@@ -5,7 +5,7 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: gunicorn unky_rick.wsgi
+    startCommand: gunicorn unky_rick.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: unky_rick.settings
