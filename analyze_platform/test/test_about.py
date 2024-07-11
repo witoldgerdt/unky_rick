@@ -1,7 +1,5 @@
-import os
 import pytest
 from django.urls import reverse
-
 
 @pytest.mark.django_db
 def test_about_page_contains_expected_text(client):
