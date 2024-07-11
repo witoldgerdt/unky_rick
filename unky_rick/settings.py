@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import django_heroku
 import dj_database_url
 import os
 
@@ -83,12 +82,11 @@ WSGI_APPLICATION = 'unky_rick.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {}
-}
 
-if os.getenv('GITHUB_ACTIONS') != 'true':
-    DATABASES['default'] = dj_database_url.config(default=os.getenv('SCHEMATOGO_URL'))
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+}
 
 
 # Password validation
@@ -139,4 +137,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-django_heroku.settings(locals())
