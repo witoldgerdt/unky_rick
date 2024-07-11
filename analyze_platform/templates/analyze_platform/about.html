@@ -60,6 +60,28 @@
             color: #333;
             margin-bottom: 15px;
         }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
@@ -69,6 +91,10 @@
             }
             p {
                 font-size: 0.9em;
+            }
+            .button {
+                padding: 12px 24px;
+                font-size: 14px;
             }
         }
     </style>
@@ -82,7 +108,9 @@
             <p>Unky Rick has travelled extensively, but his health has recently declined. This led him to move closer to your family, and he now needs some assistance.</p>
             <p>Upon arriving at his address, you are surprised to find Unky Rick is incredibly knowledgeable and sharp. He greets you with a robust and humorous demeanour, quickly making you realise just how clever and intriguing he truly is. His vast knowledge spans various fields, from science to history, and his witty remarks reveal a keen intellect.</p>
             <p>You feel a strong desire to ask Unky Rick many questions. To do so, you'll need to be prepared to learn new things, as your passion for discovery will surely be sparked.</p>
-            <button onclick="window.location.href='{% url 'money' %}'">Go to Money Page</button>
+            <div class="button-container">
+                <button class="button" onclick="window.location.href='{% url 'money' %}'">Go to Money Page</button>
+            </div>
         </div>
         <footer class="footer">
             &copy; Witold Gerdt, 2024{% if current_year > 2024 %} - {{ current_year }}{% endif %}
