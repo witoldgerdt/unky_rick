@@ -1,5 +1,4 @@
 {% load static %}
-{% include 'splash.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +22,7 @@
             overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
-        /* Container styling */
+        /* Container for the main content */
         .container {
             text-align: center;
             background: white;
@@ -43,7 +42,7 @@
             border-radius: 8px;
         }
 
-        /* Description block styling */
+        /* Description text styling */
         .description {
             margin: 20px 0;
             text-align: justify;
@@ -51,9 +50,9 @@
             word-wrap: break-word; /* Ensure long words break to the next line */
         }
 
-        /* Heading styling */
+        /* Center the heading */
         .description h1 {
-            text-align: center; /* Center the heading */
+            text-align: center;
         }
 
         /* Footer styling */
@@ -63,7 +62,7 @@
             color: #555;
         }
 
-        /* Main heading styling */
+        /* General heading styling */
         h1 {
             font-size: 2em;
             margin-bottom: 10px;
@@ -77,7 +76,7 @@
             margin-bottom: 15px;
         }
 
-        /* Button container styling for centering */
+        /* Center and style the button */
         .button-container {
             display: flex;
             justify-content: center;
@@ -97,16 +96,15 @@
             margin: 4px 2px;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            transition: background-color 0.3s ease;
         }
 
         /* Button hover effect */
         .button:hover {
             background-color: #0056b3;
-            transform: scale(1.05);
         }
 
-        /* Responsive styling for smaller screens */
+        /* Responsive adjustments */
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
