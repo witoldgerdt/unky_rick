@@ -7,6 +7,7 @@
     <meta name="description" content="This free analytics platform utilizes open-source data to perform comprehensive analysis and present results in a clear and understandable format.">
     <title>About Unky Rick</title>
     <style>
+        /* General body styling */
         body {
             margin: 0;
             padding: 0;
@@ -20,6 +21,8 @@
             line-height: 1.6;
             overflow-x: hidden; /* Prevent horizontal scrolling */
         }
+
+        /* Container styling */
         .container {
             text-align: center;
             background: white;
@@ -31,40 +34,56 @@
             margin: 20px;
             box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
         }
+
+        /* Image styling */
         .photo {
             width: 100%;
             height: auto;
             border-radius: 8px;
         }
+
+        /* Description block styling */
         .description {
             margin: 20px 0;
             text-align: justify;
             hyphens: none;
             word-wrap: break-word; /* Ensure long words break to the next line */
         }
+
+        /* Heading styling */
         .description h1 {
             text-align: center; /* Center the heading */
         }
+
+        /* Footer styling */
         .footer {
             margin-top: 20px;
             font-size: 14px;
             color: #555;
         }
+
+        /* Main heading styling */
         h1 {
             font-size: 2em;
             margin-bottom: 10px;
         }
+
+        /* Paragraph styling */
         p {
             font-size: 1em;
             line-height: 1.6;
             color: #333;
             margin-bottom: 15px;
         }
+
+        /* Button container styling for centering */
         .button-container {
             display: flex;
             justify-content: center;
             margin-top: 20px;
         }
+
+        /* Button styling */
         .button {
             background-color: #007bff;
             border: none;
@@ -77,11 +96,16 @@
             margin: 4px 2px;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
+
+        /* Button hover effect */
         .button:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
+
+        /* Responsive styling for smaller screens */
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
