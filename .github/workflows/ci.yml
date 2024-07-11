@@ -22,13 +22,12 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10.11'
+          python-version: 3.10.11
 
       - name: Install dependencies
         run: |
@@ -42,24 +41,14 @@ jobs:
             sleep 1
           done
 
-      - name: Print directory structure for debugging
-        run: |
-          ls -R
-
       - name: Run migrations
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
           python manage.py migrate
 
-      - name: Collect static files
-        env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: |
-          python manage.py collectstatic --noinput
-
       - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
-          pytest analyze_platform/test/test_about.py
+          pytest analyze_platform/test/
