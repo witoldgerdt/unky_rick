@@ -58,21 +58,8 @@ jobs:
         run: |
           python manage.py collectstatic --noinput
 
-      - name: Check for test file existence
-        run: |
-          if [ -f about/test/test_about.py ]; then
-            echo "Test file found."
-          else
-            echo "Test file not found in expected location."
-            exit 1
-          fi
-
-      - name: Print test file contents for debugging
-        run: |
-          cat about/test/test_about.py
-
       - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
-          pytest about/test/test_about.py
+          pytest analyze_platform/test/test_about.py
