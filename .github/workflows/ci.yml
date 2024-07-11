@@ -49,8 +49,8 @@ jobs:
 
       - name: Check for test file existence
         run: |
-          if [ ! -f test/test_about.py ] && [ ! -f tests/test_about.py ]; then
-            echo "Test file not found in expected locations."
+          if [ ! -f unky_rick/about/test/test_about.py ]; then
+            echo "Test file not found in expected location."
             exit 1
           fi
 
@@ -58,11 +58,4 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
-          if [ -f test/test_about.py ]; then
-            pytest test/test_about.py
-          elif [ -f tests/test_about.py ]; then
-            pytest tests/test_about.py
-          else
-            echo "No test file found"
-            exit 1
-          fi
+          pytest unky_rick/about/test/test_about.py
