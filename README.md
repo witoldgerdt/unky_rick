@@ -1,6 +1,6 @@
 # Project Overview
 
-This project demonstrates an example of using Python, Django, (Heroku), Render.com and ChatGPT as an AI tool to summarize, analyze, and visualize data from open source information.
+This project demonstrates an example of using Python, Django, ~~Heroku~~, Render.com and ChatGPT as an AI tool to summarize, analyze, and visualize data from open source information.
 
 ## Features
 
