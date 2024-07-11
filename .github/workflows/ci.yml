@@ -22,7 +22,8 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -41,6 +42,10 @@ jobs:
             sleep 1
           done
 
+      - name: Print directory structure for debugging
+        run: |
+          ls -R
+
       - name: Run migrations
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
@@ -49,13 +54,19 @@ jobs:
 
       - name: Check for test file existence
         run: |
-          if [ ! -f unky_rick/about/test/test_about.py ]; then
+          if [ -f about/test/test_about.py ]; then
+            echo "Test file found."
+          else
             echo "Test file not found in expected location."
             exit 1
           fi
+
+      - name: Print test file contents for debugging
+        run: |
+          cat about/test/test_about.py
 
       - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
-          pytest unky_rick/about/test/test_about.py
+          pytest about/test/test_about.py
