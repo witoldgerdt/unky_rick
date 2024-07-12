@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = '5a4sd65as4d'  # TODO: Change this to an environment variable for production
 DEBUG = True  # TODO: Set to False in production
-ALLOWED_HOSTS = ['unky-rick.onrender.com']
+ALLOWED_HOSTS = ['unky-rick.onrender.com', 'localhost']
 
 # Installed applications
 INSTALLED_APPS = [
