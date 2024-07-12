@@ -6,7 +6,7 @@ services:
     plan: free
     buildCommand: "./build.sh"
     startCommand: "./start.sh"
-    healthCheckPath: "/health/"
+    healthCheckPath: "/health_check/"
 
     envVars:
       - key: DJANGO_SETTINGS_MODULE
