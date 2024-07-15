@@ -22,3 +22,7 @@ class Record(BaseModel):
 class TestModel(models.Model):
     column1 = models.CharField(max_length=255)
     column2 = models.TextField()
+
+    # Ensure the __init__ constructor is compatible with pytest
+    def __init__(self, *args, **kwargs):
+        super(TestModel, self).__init__(*args, **kwargs)
