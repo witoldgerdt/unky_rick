@@ -3,6 +3,9 @@
 # Ensure PYTHONPATH includes the project directory
 export PYTHONPATH=$PYTHONPATH:/opt/render/project/src
 
+# Set the DJANGO_SETTINGS_MODULE environment variable
+export DJANGO_SETTINGS_MODULE=unky_rick.settings
+
 # Start the server using Gunicorn in the background
 gunicorn unky_rick.wsgi:application --config gunicorn.conf.py &
 
