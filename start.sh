@@ -12,7 +12,7 @@ done
 
 # Start the scheduler in the background
 echo "Starting scheduler..."
-nohup python path/to/scheduler.py &
+nohup python analyze_platform/scheduler.py &
 
 # Run tests
 pytest
