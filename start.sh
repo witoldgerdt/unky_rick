@@ -4,7 +4,8 @@
 gunicorn unky_rick.wsgi:application --config gunicorn.conf.py
 
 # Start the scheduler in the background
-nohup python analyze_platform/scheduler.py &
+echo "Starting scheduler..."
+nohup python path/to/scheduler.py > scheduler.log 2>&1 &
 
 # Wait for the server to be ready
 until curl -s http://localhost:$PORT/health_check; do

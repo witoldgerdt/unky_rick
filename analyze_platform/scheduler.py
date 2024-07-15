@@ -29,5 +29,5 @@ if __name__ == "__main__":
     try:
         scheduler.start()
     except (KeyboardInterrupt, SystemExit):
-        logger.info("Some error")
-        pass
+        logger.info("Scheduler stopped")
+        # pass
