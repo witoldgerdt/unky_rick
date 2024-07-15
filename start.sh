@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Ensure PYTHONPATH includes the project directory
+export PYTHONPATH=$PYTHONPATH:/opt/render/project/src
+
 # Start the server using Gunicorn in the background
 gunicorn unky_rick.wsgi:application --config gunicorn.conf.py &
 
