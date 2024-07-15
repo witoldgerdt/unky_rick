@@ -23,3 +23,8 @@ databases:
     plan: free
     properties:
       databaseName: unky_rick_db
+
+- type: cron
+    name: scheduler
+    schedule: "*/5 * * * *"
+    command: "python manage.py analyze_platform\scheduler.py"
