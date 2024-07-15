@@ -1,38 +1,22 @@
-from django.db import session_scope, BaseModel
+from django.db import models
 
 class DBManager:
+    """Class to manage database operations."""
+
     def __init__(self, model):
-        if not issubclass(model, BaseModel):
-            raise TypeError("Model must be a subclass of BaseModel")
         self.model = model
 
     def add_record(self, **kwargs):
-        with session_scope() as session:
-            record = self.model(**kwargs)
-            session.add(record)
+        """Add a new record to the database."""
+        self.model.objects.create(**kwargs)
 
-    def get_all_records(self):
-        with session_scope() as session:
-            return session.query(self.model).all()
+    def update_record(self, pk, **kwargs):
+        """Update an existing record in the database."""
+        obj = self.model.objects.get(pk=pk)
+        for key, value in kwargs.items():
+            setattr(obj, key, value)
+        obj.save()
 
-    def get_record_by_id(self, record_id):
-        with session_scope() as session:
-            return session.query(self.model).filter(self.model.id == record_id).one_or_none()
-
-    def update_record(self, record_id, **kwargs):
-        with session_scope() as session:
-            record = session.query(self.model).filter(self.model.id == record_id).one_or_none()
-            if record:
-                for key, value in kwargs.items():
-                    setattr(record, key, value)
-                session.add(record)
-            else:
-                print(f"Record with id {record_id} does not exist.")
-
-    def remove_record(self, record_id):
-        with session_scope() as session:
-            record = session.query(self.model).filter(self.model.id == record_id).one_or_none()
-            if record:
-                session.delete(record)
-            else:
-                print(f"Record with id {record_id} does not exist.")
+    def remove_record(self, pk):
+        """Remove a record from the database."""
+        self.model.objects.get(pk=pk).delete()
