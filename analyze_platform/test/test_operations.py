@@ -1,14 +1,6 @@
 import pytest
+from analyze_platform.models import TestModel
 from analyze_platform.operations import DBManager
-from django.db import models
-
-@pytest.mark.django_db
-class TestModel(models.Model):
-    column1 = models.CharField(max_length=100)
-    column2 = models.CharField(max_length=100)
-
-    class Meta:
-        app_label = 'analyze_platform'  # Specify the app label
 
 @pytest.fixture
 def db_manager():

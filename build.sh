@@ -12,3 +12,8 @@ python manage.py collectstatic --no-input
 
 # Apply database migrations
 python manage.py migrate
+
+# Debug
+python manage.py makemigrations analyze_platform
+python manage.py migrate analyze_platform
+

@@ -18,3 +18,7 @@ class Record(BaseModel):
 
     def __str__(self):
         return f"Record {self.id}: {self.column1}, {self.column2}"
+
+class TestModel(models.Model):
+    column1 = models.CharField(max_length=255)
+    column2 = models.TextField()
