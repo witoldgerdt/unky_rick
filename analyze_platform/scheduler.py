@@ -3,13 +3,16 @@ import os
 import logging
 import django
 from apscheduler.schedulers.blocking import BlockingScheduler
-from analyze_platform.operations import DBManager
 import datetime
 
 # Set up Django settings
 sys.path.append('/opt/render/project/src')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'unky_rick.settings')
 django.setup()
+
+# Now import the DBManager and DataRecord
+from analyze_platform.operations import DBManager
+from analyze_platform.models import DataRecord
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
