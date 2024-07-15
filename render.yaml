@@ -4,27 +4,29 @@ services:
     name: unky-rick
     env: python
     plan: free
-    buildCommand: "./build.sh"
-    startCommand: "./start.sh"
-    healthCheckPath: "/health_check/"
+    buildCommand: "./build.sh"  # Command to build the application
+    startCommand: "./start.sh"  # Command to start the application
+    healthCheckPath: "/health_check/"  # Endpoint for health checks
 
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: unky_rick.settings
+        value: unky_rick.settings  # Django settings module
       - key: SECRET_KEY
-        sync: false
+        sync: false  # Ensure this is set securely in Render.com dashboard
       - key: DATABASE_URL
         fromDatabase:
           name: unky-rick-database
-          property: connectionString
+          property: connectionString  # Database connection string from Render.com
 
 databases:
   - name: unky-rick-database
     plan: free
     properties:
-      databaseName: unky_rick_db
+      databaseName: unky_rick_db  # Name of the database
 
-# - type: cron
+# Uncomment and configure the cron job if needed
+# cron:
+#   - type: cron
 #     name: scheduler
-#     schedule: "*/5 * * * *"
-#     command: "python manage.py analyze_platform\scheduler.py" 
+#     schedule: "*/5 * * * *"  # Cron schedule
+#     command: "python manage.py analyze_platform\\scheduler.py"  # Command to run
