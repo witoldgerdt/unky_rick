@@ -10,7 +10,7 @@ until curl -s http://localhost:$PORT/health_check; do
 done
 
 # Reset the test database
-python manage.py reset_test_db
+# python manage.py reset_test_db
 
 # Start the scheduler in the background
 echo "Starting scheduler..."
