@@ -10,9 +10,11 @@ until curl -s http://localhost:$PORT/health_check; do
   sleep 5
 done
 
+
 # Start the scheduler in the background
 echo "Starting scheduler..."
 nohup python analyze_platform/scheduler.py &
+
 
 # Run tests
 pytest
