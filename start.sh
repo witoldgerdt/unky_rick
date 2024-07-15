@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Start the server
-gunicorn unky_rick.wsgi:application --config gunicorn.conf.py
+# Start the server in the background
+gunicorn unky_rick.wsgi:application --config gunicorn.conf.py &
 
 
 # Wait for the server to be ready
