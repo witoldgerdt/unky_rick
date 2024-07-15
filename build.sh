@@ -12,6 +12,3 @@ python manage.py collectstatic --no-input
 
 # Apply database migrations
 python manage.py migrate
-
-# Reset the test database
-python manage.py reset_test_db
