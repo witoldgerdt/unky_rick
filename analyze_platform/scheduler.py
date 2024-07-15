@@ -1,15 +1,23 @@
+import sys
+import os
 import logging
 from apscheduler.schedulers.blocking import BlockingScheduler
 from analyze_platform.operations import DBManager
-from django.db import Record
+from django.db import models
 import datetime
 
+# Add the project directory to the Python path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-db_manager = DBManager(Record)
+# Initialize DBManager with a Django model
+db_manager = DBManager(models.Model)
 
 def task():
+    """Function to perform scheduled tasks."""
     try:
         db_manager.add_record(column1="value1", column2="value2")
         db_manager.update_record(1, column1="updated_value1")
@@ -20,16 +28,16 @@ def task():
 
 if __name__ == "__main__":
     logger.info("Starting scheduler...")
-    print("Starting scheduler...")  # Console output
+    print("Starting scheduler...")  # Console output for visibility
     scheduler = BlockingScheduler()
     scheduler.add_job(task, 'interval', minutes=5)
     logger.info("Scheduler started")
-    print("Scheduler started")  # Console output
+    print("Scheduler started")  # Console output for visibility
     try:
         scheduler.start()
     except (KeyboardInterrupt, SystemExit):
         logger.info("Scheduler stopped")
-        print("Scheduler stopped")  # Console output
+        print("Scheduler stopped")  # Console output for visibility
     except Exception as e:
         logger.error(f"Scheduler encountered an error: {e}")
-        print(f"Scheduler encountered an error: {e}")  # Console output
+        print(f"Scheduler encountered an error: {e}")  # Console output for visibility
