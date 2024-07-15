@@ -1,20 +1,21 @@
 import sys
 import os
 import logging
+import django
 from apscheduler.schedulers.blocking import BlockingScheduler
 from analyze_platform.operations import DBManager
-from django.db import models
-import datetime
 
-# Add the project directory to the Python path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Set up Django settings
+sys.path.append('/opt/render/project/src')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'unky_rick.settings')
+django.setup()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Initialize DBManager with a Django model
-db_manager = DBManager(models.Model)
+db_manager = DBManager(django.db.models.Model)
 
 def task():
     """Function to perform scheduled tasks."""
