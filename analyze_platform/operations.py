@@ -1,4 +1,4 @@
-from app.db import session_scope, BaseModel
+from django.db import session_scope, BaseModel
 
 class DBManager:
     def __init__(self, model):

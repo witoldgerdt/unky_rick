@@ -1,6 +1,6 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-from app.operations import DBManager
-from app.db import Record
+from analyze_platform.operations import DBManager
+from django.db import Record
 import datetime
 import logging
 

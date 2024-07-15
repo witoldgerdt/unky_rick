@@ -1,6 +1,6 @@
 import unittest
-from app.operations import DBManager
-from app.db import init_db, Record
+from analyze_platform.operations import DBManager
+from django.db import init_db, Record
 
 class TestDBManager(unittest.TestCase):
     @classmethod
