@@ -22,8 +22,8 @@ done
 # python manage.py reset_test_db
 
 # Start the scheduler in the background
-echo "Starting scheduler..."
-nohup python analyze_platform/scheduler.py &
+# echo "Starting scheduler..."
+# nohup python analyze_platform/scheduler.py &
 
 # Run tests
 pytest
