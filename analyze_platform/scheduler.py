@@ -23,9 +23,11 @@ def task():
 
 if __name__ == "__main__":
     scheduler = BlockingScheduler()
-    scheduler.add_job(task, 'interval', hours=12)
+    # scheduler.add_job(task, 'interval', hours=12)
+    scheduler.add_job(task, 'interval', minutes=5)
     logger.info("Scheduler started")
     try:
         scheduler.start()
     except (KeyboardInterrupt, SystemExit):
+        logger.info("Some error")
         pass

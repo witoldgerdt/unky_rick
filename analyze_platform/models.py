@@ -2,7 +2,7 @@ from django.db import models
 
 class BaseModel(models.Model):
     """
-    Abstract base model to include common fields or methods.
+    Abstract base model to include common fields or methods
     """
     id = models.AutoField(primary_key=True)
 
