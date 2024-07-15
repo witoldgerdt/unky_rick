@@ -23,6 +23,7 @@ class TestModel(models.Model):
     column1 = models.CharField(max_length=255)
     column2 = models.TextField()
 
-    # Ensure the __init__ constructor is compatible with pytest
-    def __init__(self, *args, **kwargs):
-        super(TestModel, self).__init__(*args, **kwargs)
+    # Remove the custom __init__ constructor if it is not necessary
+    # If it is necessary, ensure it is compatible with pytest
+    # def __init__(self, *args, **kwargs):
+    #     super(TestModel, self).__init__(*args, **kwargs)
