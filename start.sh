@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Ensure PYTHONPATH includes the project directory
-export PYTHONPATH=$PYTHONPATH:/opt/render/project/src
+# export PYTHONPATH=$PYTHONPATH:/opt/render/project/src
 
 # Set the DJANGO_SETTINGS_MODULE environment variable
-export DJANGO_SETTINGS_MODULE=unky_rick.settings
+# export DJANGO_SETTINGS_MODULE=unky_rick.settings
 
 # Clear any cached Python files
-find . -name "*.pyc" -exec rm -f {} \;
+# find . -name "*.pyc" -exec rm -f {} \;
 
 # Start the server using Gunicorn in the background
 gunicorn unky_rick.wsgi:application --config gunicorn.conf.py &
