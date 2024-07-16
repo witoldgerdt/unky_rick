@@ -23,7 +23,7 @@ gunicorn unky_rick.wsgi:application --config gunicorn.conf.py
 
 # Start the scheduler in the background
 # echo "Starting scheduler..."
-# nohup python analyze_platform/scheduler.py &
+nohup python analyze_platform/scheduler.py
 
 # Run tests
 # pytest 
