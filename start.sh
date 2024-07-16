@@ -26,4 +26,4 @@ done
 # nohup python analyze_platform/scheduler.py &
 
 # Run tests
-pytest
+# pytest
