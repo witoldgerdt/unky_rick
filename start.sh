@@ -26,4 +26,4 @@ gunicorn unky_rick.wsgi:application --config gunicorn.conf.py
 # nohup python analyze_platform/scheduler.py &
 
 # Run tests
-pytest
+pytest &
