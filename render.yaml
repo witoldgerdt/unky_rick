@@ -25,8 +25,8 @@ databases:
       databaseName: unky_rick_db  # Name of the database
 
 # Uncomment and configure the cron job if needed
-# cron:
-#   - type: cron
-#     name: scheduler
-#     schedule: "*/5 * * * *"  # Cron schedule
-#     command: "python manage.py analyze_platform\\scheduler.py"  # Command to run
+cron:
+  - type: cron
+    name: scheduler
+    schedule: "*/5 * * * *"  # Cron schedule
+    command: "python manage.py analyze_platform/scheduler.py"  # Command to run

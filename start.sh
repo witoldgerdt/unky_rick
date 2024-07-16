@@ -10,7 +10,7 @@
 # find . -name "*.pyc" -exec rm -f {} \;
 
 # Start the server using Gunicorn in the background
-gunicorn unky_rick.wsgi:application --config gunicorn.conf.py &&
+gunicorn unky_rick.wsgi:application --config gunicorn.conf.py
 
 # Wait for the server to be ready
 # until curl -s http://localhost:$PORT/health_check; do
@@ -26,4 +26,4 @@ gunicorn unky_rick.wsgi:application --config gunicorn.conf.py &&
 # nohup python analyze_platform/scheduler.py &
 
 # Run tests
-pytest 
+# pytest 
