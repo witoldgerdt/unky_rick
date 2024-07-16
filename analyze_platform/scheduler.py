@@ -35,7 +35,7 @@ if __name__ == "__main__":
     logger.info("Starting scheduler...")
     print("Starting scheduler...")  # Console output for visibility
     scheduler = BlockingScheduler()
-    scheduler.add_job(task, 'interval', minutes=5)
+    scheduler.add_job(task, 'interval', seconds=15)
     logger.info("Scheduler started")
     print("Scheduler started")  # Console output for visibility
     try:
