@@ -9,6 +9,10 @@
 # Clear any cached Python files
 # find . -name "*.pyc" -exec rm -f {} \;
 
+# Start the scheduler in the background
+# echo "Starting scheduler..."
+python analyze_platform/scheduler.py
+
 # Start the server using Gunicorn in the background
 gunicorn unky_rick.wsgi:application --config gunicorn.conf.py
 
@@ -21,9 +25,6 @@ gunicorn unky_rick.wsgi:application --config gunicorn.conf.py
 # Reset the test database
 # python manage.py reset_test_db
 
-# Start the scheduler in the background
-# echo "Starting scheduler..."
-nohup python analyze_platform/scheduler.py
 
 # Run tests
 # pytest 
