@@ -11,7 +11,7 @@ This project demonstrates an example of using Python, Django, ~~Heroku~~, Render
 ## Getting Started
 
 1. Open [Render](https://unky-rick.onrender.com/).
-2. Wait for approximately 1 minute for the system to initialize.
+2. Wait for approximately 2 minute for the system to initialize.
 3. Review the provided information carefully.
 4. Conduct your analysis.
 
