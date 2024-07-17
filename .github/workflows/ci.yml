@@ -1,62 +1,71 @@
 name: Django Tests
 
-on: [push, pull_request]
+on: [push, pull_request]  # Trigger the workflow on push and pull request events
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner for the job
 
     services:
-      postgres:
-        image: postgres:latest
+      postgres:  # Define the PostgreSQL service
+        image: postgres:latest  # Use the latest PostgreSQL Docker image
         ports:
-          - 5432:5432
+          - 5432:5432  # Map port 5432 of the container to port 5432 on the host
         env:
-          POSTGRES_DB: test_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        options: >-
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}  # Set the database name from GitHub secrets
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}  # Set the database user from GitHub secrets
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}  # Set the database password from GitHub secrets
+        options: >-  # Configure health checks for the PostgreSQL container
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
     env:
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable for Django
+      PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}  # Set the PGPASSWORD environment variable for PostgreSQL commands
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2  # Check out the code from the repository
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v2  # Set up the specified version of Python
       with:
-        python-version: 3.10.11
+        python-version: 3.10.11  # Use Python version 3.10.11
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        python -m pip install --upgrade pip  # Upgrade pip to the latest version
+        pip install -r requirements.txt  # Install the dependencies from requirements.txt
 
     - name: Wait for PostgreSQL
       run: |
         until pg_isready -h localhost -p 5432; do
-          echo "Waiting for PostgreSQL to be ready..."
+          echo "Waiting for PostgreSQL to be ready..."  # Wait until PostgreSQL is ready
           sleep 1
         done
 
     - name: Create test database
       run: |
-        psql -h localhost -U postgres -c "DROP DATABASE IF EXISTS test_db;"
-        psql -h localhost -U postgres -c "CREATE DATABASE test_db;"
+        psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"  # Drop the test database if it exists
+        psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};"  # Create a new test database
+      env:
+        PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}  # Use the PGPASSWORD environment variable for authentication
 
     - name: Run migrations
       run: |
-        python manage.py migrate
+        python manage.py migrate  # Run Django migrations
+      env:
+        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable
 
     - name: Show migrations status
       run: |
-        python manage.py showmigrations
+        python manage.py showmigrations  # Show the status of Django migrations
+      env:
+        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable
 
     - name: Run tests
       run: |
-        pytest
+        pytest  # Run the tests using pytest
+      env:
+        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable
