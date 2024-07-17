@@ -11,8 +11,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Record',
+         migrations.CreateModel(
+            name='DataRecord',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('column1', models.CharField(max_length=50)),
