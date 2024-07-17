@@ -7,7 +7,6 @@
     <title>Unky Rick</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
-        /* Style the splash screen */
         .splash-screen {
             position: fixed;
             width: 100%;
@@ -33,16 +32,19 @@
     </style>
 </head>
 <body>
+    {% if not is_testing %}
     <div class="splash-screen" id="splash-screen">
         <div class="spinner"></div>
     </div>
+    {% endif %}
     <div id="content" style="display: none;">
         {% block content %}{% endblock %}
     </div>
     <script>
-        // Hide splash screen and show content after page load
         window.addEventListener('load', function () {
+            {% if not is_testing %}
             document.getElementById('splash-screen').style.display = 'none';
+            {% endif %}
             document.getElementById('content').style.display = 'block';
         });
     </script>

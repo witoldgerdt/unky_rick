@@ -1,4 +1,4 @@
-import os
+import os, sys
 from pathlib import Path
 import dj_database_url
 
@@ -93,3 +93,7 @@ STORAGES = {
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Context processor to add `is_testing` variable
+def is_testing(request):
+    return {'is_testing': 'test' in sys.argv}
