@@ -1,5 +1,9 @@
 from django.db import models
 
 class DataRecord(models.Model):
-    column1 = models.CharField(max_length=255)
-    column2 = models.TextField()
+    id = models.AutoField(primary_key=True)
+    column1 = models.CharField(max_length=50)
+    column2 = models.CharField(max_length=50)
+
+    class Meta:
+        abstract = False

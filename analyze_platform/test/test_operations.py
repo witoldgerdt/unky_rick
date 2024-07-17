@@ -2,6 +2,7 @@ import pytest
 from analyze_platform.models import DataRecord
 from analyze_platform.operations import DBManager
 
+
 @pytest.fixture
 def db_manager():
     return DBManager(DataRecord)
