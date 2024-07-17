@@ -1,4 +1,4 @@
-# unky_rick/data_syncer.py
+# analyze_platform/data_syncer.py
 import time
 from datetime import datetime, timedelta
 from django.utils.deprecation import MiddlewareMixin
@@ -13,7 +13,7 @@ class DataSyncerMiddleware(MiddlewareMixin):
         # Check the time_update value
         if self.is_data_update_needed():
             # Render splash page
-            response = render(request, 'splash.html')
+            response = render(request, 'analyze_platform/splash.html')
             # Perform data fetch in background
             self.fetch_new_data()
             return response
