@@ -124,6 +124,8 @@
     </style>
 </head>
 <body>
+    {% extends "base.html" %}
+    {% block content %}
     <div class="container">
         <img src="{% static 'about/images/unky_Rick.jpg' %}" alt="Unky Rick" class="photo">
         <div class="description">
@@ -140,5 +142,6 @@
             &copy; Witold Gerdt, 2024{% if current_year > 2024 %} - {{ current_year }}{% endif %}
         </footer>
     </div>
+    {% endblock %}
 </body>
 </html>
