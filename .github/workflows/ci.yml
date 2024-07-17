@@ -26,7 +26,8 @@ jobs:
       PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}  # Set the PGPASSWORD environment variable for PostgreSQL commands
 
     steps:
-    - uses: actions/checkout@v2  # Check out the code from the repository
+    - name: Check out code
+      uses: actions/checkout@v2  # Check out the code from the repository
 
     - name: Set up Python
       uses: actions/setup-python@v2  # Set up the specified version of Python
@@ -38,7 +39,7 @@ jobs:
         python -m pip install --upgrade pip  # Upgrade pip to the latest version
         pip install -r requirements.txt  # Install the dependencies from requirements.txt
 
-    - name: Wait for PostgreSQL
+    - name: Wait for PostgreSQL to be ready
       run: |
         until pg_isready -h localhost -p 5432; do
           echo "Waiting for PostgreSQL to be ready..."  # Wait until PostgreSQL is ready
