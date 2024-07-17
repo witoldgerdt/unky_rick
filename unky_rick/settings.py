@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 from pathlib import Path
 import dj_database_url
 
@@ -9,7 +10,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '5a4sd65as4d'  # TODO: Change this to an environment variable for production
 DEBUG = 'False'
 ALLOWED_HOSTS = ['unky-rick.onrender.com', 'localhost', '127.0.0.1']
-
 
 # Installed applications
 INSTALLED_APPS = [
@@ -50,7 +50,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'your_app.context_processors.is_testing',  # Add this line
+                'analyze_platform.context_processors.is_testing',
             ],
         },
     },
