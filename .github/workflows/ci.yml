@@ -1,4 +1,4 @@
-name: Django Tests
+name: Django Tests  # Name of the workflow
 
 on: [push, pull_request]  # Trigger the workflow on push and pull request events
 
@@ -55,7 +55,7 @@ jobs:
 
     - name: Run migrations
       run: |
-        python manage.py migrate  # Run Django migrations
+        python manage.py migrate --noinput --verbosity 2  # Run Django migrations with increased verbosity
       env:
         DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable
 
@@ -67,6 +67,6 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest  # Run the tests using pytest
+        pytest -v  # Run the tests using pytest with increased verbosity
       env:
         DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable
