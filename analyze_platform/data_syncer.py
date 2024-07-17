@@ -25,8 +25,8 @@ class DataSyncerMiddleware(MiddlewareMixin):
         with connection.cursor() as cursor:
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS data_status (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    time_update DATETIME DEFAULT CURRENT_TIMESTAMP
+                    id SERIAL PRIMARY KEY,
+                    time_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             ''')
 
@@ -35,7 +35,7 @@ class DataSyncerMiddleware(MiddlewareMixin):
             cursor.execute('SELECT time_update FROM data_status ORDER BY id DESC LIMIT 1')
             row = cursor.fetchone()
             if row:
-                last_update = datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S')
+                last_update = row[0]
                 if datetime.now() - last_update > timedelta(hours=12):
                     return True
             else:
