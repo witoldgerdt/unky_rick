@@ -35,9 +35,20 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Wait for PostgreSQL
+      run: |
+        until pg_isready -h localhost -p 5432; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 1
+        done
+
     - name: Run migrations
       run: |
         python manage.py migrate
+
+    - name: Show migrations status
+      run: |
+        python manage.py showmigrations
 
     - name: Run tests
       run: |
