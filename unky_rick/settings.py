@@ -50,7 +50,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'analyze_platform.context_processors.is_testing',
+                'analyze_platform.context_processors.is_testing',  # Ensure this line is present
             ],
         },
     },
@@ -94,7 +94,3 @@ STORAGES = {
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Context processor to add `is_testing` variable
-def is_testing(request):
-    return {'is_testing': 'test' in sys.argv}
