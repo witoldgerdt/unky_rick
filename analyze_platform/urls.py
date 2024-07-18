@@ -11,4 +11,5 @@ urlpatterns = [
     path('money/', views.money, name='money'),
     path('splash/', views.splash, name='splash'),
     path('health_check/', health_check, name='health_check'),
+    path('update_data/', views.update_data, name='update_data'),  
 ]
