@@ -55,7 +55,7 @@ jobs:
 
     - name: Apply migrations
       run: |
-        python manage.py migrate --merge --noinput --verbosity 2
+        python manage.py migrate --noinput --verbosity 2
       env:
         DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
 
