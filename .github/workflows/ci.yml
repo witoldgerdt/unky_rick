@@ -53,13 +53,7 @@ jobs:
       env:
         PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
-    - name: Create required table
-      run: |
-        psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "CREATE TABLE IF NOT EXISTS analyze_platform_datastatus (id serial PRIMARY KEY, update_time timestamp NOT NULL);"
-      env:
-        PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-
-    - name: Run migrations
+    - name: Apply migrations
       run: |
         python manage.py migrate --noinput --verbosity 2
       env:
