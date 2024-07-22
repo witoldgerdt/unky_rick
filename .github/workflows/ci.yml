@@ -53,6 +53,12 @@ jobs:
       env:
         PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
+    - name: Merge migrations
+      run: |
+        python manage.py makemigrations --merge --noinput
+      env:
+        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
+
     - name: Apply migrations
       run: |
         python manage.py migrate --noinput --verbosity 2
