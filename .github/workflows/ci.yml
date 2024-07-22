@@ -39,17 +39,16 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Wait for PostgreSQL to be ready
-      run: |
-        until pg_isready -h localhost -p 5432; do
-          echo "Waiting for PostgreSQL to be ready..."
-          sleep 1
-        done
-
     - name: Create test database
       run: |
         psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"
         psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};"
+      env:
+        PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
+    - name: Create required table
+      run: |
+        psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "CREATE TABLE IF NOT EXISTS analyze_platform_datastatus (id serial PRIMARY KEY, update_time timestamp NOT NULL);"
       env:
         PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
