@@ -1,78 +1,78 @@
-name: Django Tests  # Name of the workflow
+name: Django Tests
 
-on: [push, pull_request]  # Trigger the workflow on push and pull request events
+on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner for the job
+    runs-on: ubuntu-latest
 
     services:
-      postgres:  # Define the PostgreSQL service
-        image: postgres:latest  # Use the latest PostgreSQL Docker image
+      postgres:
+        image: postgres:latest
         ports:
-          - 5432:5432  # Map port 5432 of the container to port 5432 on the host
+          - 5432:5432
         env:
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}  # Set the database name from GitHub secrets
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}  # Set the database user from GitHub secrets
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}  # Set the database password from GitHub secrets
-        options: >-  # Configure health checks for the PostgreSQL container
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
     env:
-      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable for Django
-      PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}  # Set the PGPASSWORD environment variable for PostgreSQL commands
+      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
+      PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
     steps:
     - name: Check out code
-      uses: actions/checkout@v2  # Check out the code from the repository
+      uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v2  # Set up the specified version of Python
+      uses: actions/setup-python@v2
       with:
-        python-version: 3.10.11  # Use Python version 3.10.11
+        python-version: 3.10.11
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip  # Upgrade pip to the latest version
-        pip install -r requirements.txt  # Install the dependencies from requirements.txt
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
     - name: Wait for PostgreSQL to be ready
       run: |
         until pg_isready -h localhost -p 5432; do
-          echo "Waiting for PostgreSQL to be ready..."  # Wait until PostgreSQL is ready
+          echo "Waiting for PostgreSQL to be ready..."
           sleep 1
         done
 
     - name: Create test database
       run: |
-        psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"  # Drop the test database if it exists
-        psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};"  # Create a new test database
+        psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"
+        psql -h localhost -U ${{ secrets.POSTGRES_USER }} -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};"
       env:
-        PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}  # Use the PGPASSWORD environment variable for authentication
+        PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
     - name: Run migrations
       run: |
-        python manage.py migrate --noinput --verbosity 2  # Run Django migrations with increased verbosity
+        python manage.py migrate --noinput --verbosity 2
       env:
-        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable
+        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
 
     - name: Show migrations status
       run: |
-        python manage.py showmigrations  # Show the status of Django migrations
+        python manage.py showmigrations
       env:
-        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable
+        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
 
     - name: Collect static files
       run: |
-        python manage.py collectstatic --noinput  # Collect static files
+        python manage.py collectstatic --noinput
       env:
-        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable
+        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
 
     - name: Run tests
       run: |
-        pytest -v  # Run the tests using pytest with increased verbosity
+        pytest -v
       env:
-        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}  # Set the DATABASE_URL environment variable
+        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
