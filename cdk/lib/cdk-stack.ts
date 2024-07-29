@@ -35,13 +35,13 @@ export class CdkStack extends cdk.Stack {
     // RDS Instance
     const dbInstance = new rds.DatabaseInstance(this, 'RDSInstance', {
       engine: rds.DatabaseInstanceEngine.postgres({
-        version: rds.PostgresEngineVersion.VER_12_5
+        version: rds.PostgresEngineVersion.VER_16_3 // Updated to PostgreSQL 15
       }),
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.MICRO),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO), // Using T3 instance class
       vpc,
       securityGroups: [rdsSecurityGroup],
       multiAz: false,
-      allocatedStorage: 30, // Increased storage size
+      allocatedStorage: 100, // Updated storage size to a valid value
       storageType: rds.StorageType.GP2,
       cloudwatchLogsExports: ['postgresql'],
       deletionProtection: false,
@@ -106,3 +106,4 @@ export class CdkStack extends cdk.Stack {
     });
   }
 }
+
