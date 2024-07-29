@@ -40,7 +40,7 @@ export class CdkStack extends cdk.Stack {
       deletionProtection: false,
       publiclyAccessible: false,
       vpcSubnets: {
-        subnetType: ec2.SubnetType.PUBLIC,
+        subnetType: ec2.SubnetType.PRIVATE_WITH_NAT,
       },
       credentials: rds.Credentials.fromGeneratedSecret('postgres'), // Generated credentials
     });
@@ -50,8 +50,7 @@ export class CdkStack extends cdk.Stack {
       secretName: 'DatabaseCredentials',
       generateSecretString: {
         secretStringTemplate: JSON.stringify({
-          username: dbInstance.secret?.secretValueFromJson('username').toString(),
-          password: dbInstance.secret?.secretValueFromJson('password').toString(),
+          username: dbInstance.secret?.secretValueFromJson('username')?.unsafeUnwrap() || 'postgres'
         }),
         generateStringKey: 'password',
       }
@@ -96,7 +95,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, 'DatabaseName', {
-      value: dbInstance.secret?.secretValueFromJson('dbname').toString(),
+      value: dbInstance.instanceIdentifier,
     });
   }
 }
