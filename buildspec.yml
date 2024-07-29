@@ -1,18 +1,41 @@
 version: 0.2
 
+env:
+  variables:
+    SECRET_NAME: "prod/DATABASE_URL"
+    REGION: "eu-central-1"
+    DEPLOY_PHASE: "db_setup"  # Default phase, will be overridden by pipeline environment variables
+
 phases:
   install:
     runtime-versions:
-      python: 3.10.11
+      python: 3.8
     commands:
       - pip install -r requirements.txt
+      - pip install boto3
+      - pip install dj-database-url
+
   pre_build:
     commands:
-      - python manage.py makemigrations
-      - python manage.py migrate
+      - echo "DEPLOY_PHASE=$DEPLOY_PHASE"
+      - DATABASE_URL=$(aws secretsmanager get-secret-value --secret-id $SECRET_NAME --query SecretString --output text | jq -r '.DATABASE_URL')
+      - export DATABASE_URL=$DATABASE_URL
+      - echo "DATABASE_URL=$DATABASE_URL"
+
   build:
     commands:
-      - python manage.py collectstatic --noinput
+      - if [ "$DEPLOY_PHASE" == "db_setup" ]; then
+          python manage.py makemigrations;
+          python manage.py migrate;
+        fi
+
+  post_build:
+    commands:
+      - if [ "$DEPLOY_PHASE" == "app_deploy" ]; then
+          echo "Deploying application to EC2";
+          # Include any necessary steps to deploy the application to EC2, such as copying files and restarting services;
+        fi
+
 artifacts:
   files:
     - '**/*'
