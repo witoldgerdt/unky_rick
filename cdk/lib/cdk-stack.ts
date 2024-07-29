@@ -40,7 +40,7 @@ export class CdkStack extends cdk.Stack {
       deletionProtection: false,
       publiclyAccessible: false,
       vpcSubnets: {
-        subnetType: ec2.SubnetType.PRIVATE_WITH_NAT,
+        subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
       },
       credentials: rds.Credentials.fromGeneratedSecret('postgres'), // Generated credentials
     });
