@@ -14,16 +14,23 @@ export class CdkStack extends cdk.Stack {
       maxAzs: 2,
     });
 
-    // Security Group
-    const securityGroup = new ec2.SecurityGroup(this, 'SecurityGroup', {
+    // Security Group for EC2
+    const ec2SecurityGroup = new ec2.SecurityGroup(this, 'Ec2SecurityGroup', {
       vpc,
       allowAllOutbound: true,
     });
 
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(80), 'Allow HTTP');
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(443), 'Allow HTTPS');
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(22), 'Allow SSH');
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(5432), 'Allow PostgreSQL');
+    ec2SecurityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(80), 'Allow HTTP');
+    ec2SecurityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(443), 'Allow HTTPS');
+    ec2SecurityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(22), 'Allow SSH');
+
+    // Security Group for RDS
+    const rdsSecurityGroup = new ec2.SecurityGroup(this, 'RdsSecurityGroup', {
+      vpc,
+      allowAllOutbound: true,
+    });
+
+    rdsSecurityGroup.addIngressRule(ec2.Peer.securityGroupId(ec2SecurityGroup.securityGroupId), ec2.Port.tcp(5432), 'Allow PostgreSQL from EC2');
 
     // RDS Instance
     const dbInstance = new rds.DatabaseInstance(this, 'RDSInstance', {
@@ -32,9 +39,9 @@ export class CdkStack extends cdk.Stack {
       }),
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.MICRO),
       vpc,
-      securityGroups: [securityGroup],
+      securityGroups: [rdsSecurityGroup],
       multiAz: false,
-      allocatedStorage: 20,
+      allocatedStorage: 30, // Increased storage size
       storageType: rds.StorageType.GP2,
       cloudwatchLogsExports: ['postgresql'],
       deletionProtection: false,
@@ -70,7 +77,7 @@ export class CdkStack extends cdk.Stack {
       vpc,
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO),
       machineImage: ec2.MachineImage.latestAmazonLinux2(),
-      securityGroup,
+      securityGroup: ec2SecurityGroup,
       role,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PUBLIC,
