@@ -3,45 +3,59 @@ import { Construct } from 'constructs';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
-import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class PipelineStack extends cdk.Stack {
-    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-        super(scope, id, props);
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
 
-        // Define the pipeline
-        const pipeline = new codepipeline.Pipeline(this, 'Pipeline', {
-            pipelineName: 'MyPipeline',
-        });
+    const artifactBucket = new s3.Bucket(this, 'PipelineArtifactsBucket');
 
-        // Define the source stage
-        const sourceOutput = new codepipeline.Artifact();
-        pipeline.addStage({
-            stageName: 'Source',
-            actions: [
-                new codepipeline_actions.GitHubSourceAction({
-                    actionName: 'GitHub_Source',
-                    owner: 'OWNER',
-                    repo: 'REPO',
-                    branch: 'main',
-                    oauthToken: cdk.SecretValue.secretsManager('prod/GITHUB_TOKEN'),
-                    output: sourceOutput,
-                }),
-            ],
-        });
+    const sourceOutput = new codepipeline.Artifact();
 
-        // Define the build stage
-        const buildOutput = new codepipeline.Artifact();
-        pipeline.addStage({
-            stageName: 'Build',
-            actions: [
-                new codepipeline_actions.CodeBuildAction({
-                    actionName: 'CodeBuild',
-                    project: new codebuild.PipelineProject(this, 'BuildProject'),
-                    input: sourceOutput,
-                    outputs: [buildOutput],
-                }),
-            ],
-        });
-    }
+    const role = new iam.Role(this, 'PipelineRole', {
+      assumedBy: new iam.ServicePrincipal('codepipeline.amazonaws.com'),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonS3ReadOnlyAccess'),
+        iam.ManagedPolicy.fromAwsManagedPolicyName('AWSCodePipeline_FullAccess'),
+        iam.ManagedPolicy.fromAwsManagedPolicyName('AWSCodeBuildAdminAccess')
+      ],
+    });
+
+    new codepipeline.Pipeline(this, 'Pipeline', {
+      artifactBucket,
+      role: role,
+      stages: [
+        {
+          stageName: 'Source',
+          actions: [
+            new codepipeline_actions.GitHubSourceAction({
+              actionName: 'GitHub_Source',
+              owner: 'witoldgerdt',  
+              repo: 'unky_rick',       
+              oauthToken: cdk.SecretValue.secretsManager('prod/GITHUB_TOKEN', { jsonField: 'github-token' }),
+              output: sourceOutput,
+              branch: 'main',
+            }),
+          ],
+        },
+        {
+          stageName: 'Build',
+          actions: [
+            new codepipeline_actions.CodeBuildAction({
+              actionName: 'Build',
+              project: new codebuild.PipelineProject(this, 'BuildProject', {
+                environment: {
+                  buildImage: codebuild.LinuxBuildImage.STANDARD_5_0,
+                },
+              }),
+              input: sourceOutput,
+              outputs: [new codepipeline.Artifact()],
+            }),
+          ],
+        },
+      ],
+    });
+  }
 }
