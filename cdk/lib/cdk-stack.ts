@@ -4,6 +4,8 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as rds from 'aws-cdk-lib/aws-rds';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+import * as codedeploy from 'aws-cdk-lib/aws-codedeploy';
+import * as autoscaling from 'aws-cdk-lib/aws-autoscaling';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -35,7 +37,7 @@ export class CdkStack extends cdk.Stack {
     // RDS Instance
     const dbInstance = new rds.DatabaseInstance(this, 'RDSInstance', {
       engine: rds.DatabaseInstanceEngine.postgres({
-        version: rds.PostgresEngineVersion.VER_16_3 // Updated to PostgreSQL 15
+        version: rds.PostgresEngineVersion.VER_16_3 // Updated to PostgreSQL 16
       }),
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO), // Using T3 instance class
       vpc,
@@ -52,15 +54,15 @@ export class CdkStack extends cdk.Stack {
       credentials: rds.Credentials.fromGeneratedSecret('postgres'), // Generated credentials
     });
 
-    // Create a secret to store the database credentials
-    const databaseSecret = new secretsmanager.Secret(this, 'DatabaseSecret', {
-      secretName: 'DatabaseCredentials',
+    // Create the DATABASE_URL secret
+    const databaseUrlSecret = new secretsmanager.Secret(this, 'DatabaseUrlSecret', {
+      secretName: 'DATABASE_URL',
       generateSecretString: {
         secretStringTemplate: JSON.stringify({
-          username: dbInstance.secret?.secretValueFromJson('username')?.unsafeUnwrap() || 'postgres'
+          database_url: `postgresql://postgres:${dbInstance.secret?.secretValueFromJson('password').toString()}@${dbInstance.dbInstanceEndpointAddress}:5432/mydatabase`
         }),
-        generateStringKey: 'password',
-      }
+        generateStringKey: 'database_url',
+      },
     });
 
     // IAM Role for EC2
@@ -92,13 +94,42 @@ export class CdkStack extends cdk.Stack {
       'chown -R ec2-user:ec2-user /var/www/unky_rick'
     );
 
+    // Auto Scaling Group for EC2 Instances
+    const autoScalingGroup = new autoscaling.AutoScalingGroup(this, 'ASG', {
+      vpc,
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO),
+      machineImage: ec2.MachineImage.latestAmazonLinux2(),
+      minCapacity: 1,
+      maxCapacity: 1,
+      securityGroup: ec2SecurityGroup,
+      role,
+    });
+
+    // CodeDeploy Application
+    const application = new codedeploy.ServerApplication(this, 'CodeDeployApplication', {
+      applicationName: 'unky_rick_app',
+    });
+
+    // CodeDeploy Deployment Group
+    const deploymentGroup = new codedeploy.ServerDeploymentGroup(this, 'DeploymentGroup', {
+      application,
+      deploymentGroupName: 'unky_rick_deployment_group',
+      autoScalingGroups: [autoScalingGroup],
+      installAgent: true,
+      deploymentConfig: codedeploy.ServerDeploymentConfig.ONE_AT_A_TIME,
+      autoRollback: {
+        failedDeployment: true,
+        stoppedDeployment: true,
+      },
+    });
+
     // Output the database endpoint and secret ARN
     new cdk.CfnOutput(this, 'DatabaseEndpoint', {
       value: dbInstance.dbInstanceEndpointAddress,
     });
 
     new cdk.CfnOutput(this, 'DatabaseSecretARN', {
-      value: databaseSecret.secretArn,
+      value: databaseUrlSecret.secretArn,
     });
 
     new cdk.CfnOutput(this, 'DatabaseName', {
@@ -107,3 +138,6 @@ export class CdkStack extends cdk.Stack {
   }
 }
 
+const app = new cdk.App();
+new CdkStack(app, 'CdkStack');
+app.synth();
