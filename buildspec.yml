@@ -3,26 +3,19 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.8
-    commands:
-      - pip install -r requirements.txt
+      nodejs: 20
   pre_build:
     commands:
-      - echo Pre-build started
+      - echo Pre-build phase
   build:
     commands:
-      - if [[ $STAGE == "prepare_db" ]]; then
-          export DATABASE_URL=$(aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:eu-central-1:211125541723:secret:prod/DATABASE_URL-aCWqmI --query SecretString --output text | jq -r ".database_url");
-          python manage.py migrate;
-          python manage.py collectstatic --noinput;
-        else
-          echo Build started;
-        fi
+      - echo Build phase
+      - chmod +x init_db.sh
+      - ./init_db.sh
   post_build:
     commands:
-      - echo Build completed
+      - echo Post-build phase
 
-artifacts:
-  files:
-    - '**/*'
-  discard-paths: yes
+env:
+  secrets-manager:
+    DATABASE_URL: prod/DATABASE_URL:DATABASE_URL
