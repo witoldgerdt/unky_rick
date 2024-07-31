@@ -24,7 +24,7 @@ export class PipelineStack extends cdk.Stack {
     const buildProject = new codebuild.PipelineProject(this, 'BuildProject', {
       buildSpec: codebuild.BuildSpec.fromSourceFilename('buildspec.yml')
     });
-    const buildOutput = new codepipeline.Artifact();
+    const buildOutput = new codepipeline.Artifact('BuildOutput');
     const buildAction = new codepipeline_actions.CodeBuildAction({
       actionName: 'CodeBuild',
       project: buildProject,
@@ -33,11 +33,15 @@ export class PipelineStack extends cdk.Stack {
     });
 
     // Deploy stage (to prepare DB)
+    const dbDeployProject = new codebuild.PipelineProject(this, 'DBDeployProject', {
+      buildSpec: codebuild.BuildSpec.fromSourceFilename('buildspec.yml')
+    });
+    const dbDeployOutput = new codepipeline.Artifact('DBDeployOutput');
     const dbDeployAction = new codepipeline_actions.CodeBuildAction({
       actionName: 'DBDeploy',
-      project: buildProject,
+      project: dbDeployProject,
       input: sourceOutput,
-      outputs: [buildOutput],
+      outputs: [dbDeployOutput],
       environmentVariables: {
         'STAGE': {
           value: 'prepare_db'
@@ -48,7 +52,7 @@ export class PipelineStack extends cdk.Stack {
     // Deploy stage (to deploy the app)
     const deployAction = new codepipeline_actions.CodeDeployServerDeployAction({
       actionName: 'CodeDeploy',
-      input: buildOutput,
+      input: dbDeployOutput,
       deploymentGroup: codedeploy.ServerDeploymentGroup.fromServerDeploymentGroupAttributes(this, 'CodeDeployGroup', {
         application: codedeploy.ServerApplication.fromServerApplicationName(this, 'unky_rick_app', 'unky_rick_app'),
         deploymentGroupName: 'unky_rick_deployment_group',
@@ -78,7 +82,3 @@ export class PipelineStack extends cdk.Stack {
     });
   }
 }
-
-const app = new cdk.App();
-new PipelineStack(app, 'PipelineStack');
-app.synth();
