@@ -12,6 +12,7 @@ phases:
   build:
     commands:
       - if [[ $STAGE == "prepare_db" ]]; then
+          export DATABASE_URL=$(aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:eu-central-1:211125541723:secret:prod/DATABASE_URL-aCWqmI --query SecretString --output text | jq -r ".database_url");
           python manage.py migrate;
           python manage.py collectstatic --noinput;
         else

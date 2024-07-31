@@ -54,16 +54,8 @@ export class CdkStack extends cdk.Stack {
       credentials: rds.Credentials.fromGeneratedSecret('postgres'), // Generated credentials
     });
 
-    // Create the DATABASE_URL secret
-    const databaseUrlSecret = new secretsmanager.Secret(this, 'DatabaseUrlSecret', {
-      secretName: 'DATABASE_URL',
-      generateSecretString: {
-        secretStringTemplate: JSON.stringify({
-          database_url: `postgresql://postgres:${dbInstance.secret?.secretValueFromJson('password').toString()}@${dbInstance.dbInstanceEndpointAddress}:5432/mydatabase`
-        }),
-        generateStringKey: 'database_url',
-      },
-    });
+    // Use existing DATABASE_URL secret
+    const databaseUrlSecret = secretsmanager.Secret.fromSecretCompleteArn(this, 'DatabaseUrlSecret', 'arn:aws:secretsmanager:eu-central-1:211125541723:secret:prod/DATABASE_URL-aCWqmI');
 
     // IAM Role for EC2
     const role = new iam.Role(this, 'InstanceSSMRole', {
